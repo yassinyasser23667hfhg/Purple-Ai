@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Purple AI</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1f0036, #3b0066);
+      font-family: Arial;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-top: 40px;
+      color: #c084fc;
+    }
+
+    #chat-box {
+      width: 80%;
+      max-width: 600px;
+      height: 400px;
+      overflow-y: auto;
+      background: #140024;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+    }
+
+    input {
+      width: 70%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #a855f7;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #9333ea;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Purple AI 💜</h1>
+
+<div id="chat-box"></div>
+
+<input id="user-input" placeholder="Ask something..." />
+<button onclick="sendMessage()">Send</button>
+
+<script>
+async function sendMessage() {
+  const input = document.getElementById("user-input");
+  const chatBox = document.getElementById("chat-box");
+
+  const message = input.value;
+  if (!message) return;
+
+  chatBox.innerHTML += "<p><b>You:</b> " + message + "</p>";
+
+  const response = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
+
+  const data = await response.json();
+
+  chatBox.innerHTML += "<p><b>AI:</b> " + data.reply + "</p>";
+  input.value = "";
+}
+</script>
+
+</body>
+</html>
